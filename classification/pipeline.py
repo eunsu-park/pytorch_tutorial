@@ -23,7 +23,7 @@ class LoadData:
             flare_class : str
                 flare class
         """
-        image = imread(filepath)[:,:,0]
+        image = imread(filepath)
         flare_class = filepath.split(os.sep)[-2]
         return image, flare_class
 
