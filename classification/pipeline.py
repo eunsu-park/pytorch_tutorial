@@ -1,7 +1,6 @@
 import os, glob
 import torch
 from torch.utils.data import Dataset, DataLoader
-from torchvision.transforms import Compose
 from imageio import imread
 from skimage.transform import resize
 import numpy as np
@@ -158,10 +157,9 @@ class CustomDataset(Dataset):
             pattern = f"{data_root}/Test/*/*/*.png"
         self.list_data = glob.glob(pattern)
         self.nb_data = len(self.list_data)
-        self.transform_image = Compose([NormalizeData(),
-                                        ResizeData(image_size),
-                                        ToTensor()])
-        self.transform_label = Compose([ToTensor()])
+        self.normalize = NormalizeData
+        self.resize = ResizeData(image_size)
+        self.totensor = ToTensor()
         
     def __len__(self):
         """
@@ -184,11 +182,12 @@ class CustomDataset(Dataset):
                 레이블 데이터
         """
         image, flare_class = LoadData()(self.list_data[idx])
+        image = self.normalize(image)
+        image = self.resize(image)
+        image = self.totensor(image)
+
         label = MakeLabel()(flare_class)
-
-        image = self.transform_image(image)
-        label = self.transform_label(label)
-
+        label = self.totensor(label)
         return image, label
 
 

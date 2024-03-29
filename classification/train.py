@@ -58,11 +58,14 @@ while epochs < opt.num_epochs:
         image = image.to(device)
         label = label.to(device)
 
+        # 실제 학습이 이루어지는 부분
         optimizer.zero_grad()
         output = network(image)
         loss = criterion(output, label)
         loss.backward()
         optimizer.step()
+        # 실제 학습이 이루어지는 부분
+
         losses.append(loss.item())            
         iters += 1
 
