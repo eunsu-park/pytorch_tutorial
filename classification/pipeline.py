@@ -4,27 +4,33 @@ from torch.utils.data import Dataset, DataLoader
 from imageio import imread
 from skimage.transform import resize
 import numpy as np
+import pandas as pd
 
 
 class LoadData:
     """
     이미지 파일을 불러오고, flare class를 확인하는 클래스
     """
-    def __call__(self, filepath):
+    def __init__(self, data_root):
+        """
+        LoadData 클래스의 생성자
+        Args:
+            data_root : str
+                flare 데이터셋의 경로
+        """
+        self.data_root = data_root
+    def __call__(self, file_path):
         """
         이미지 파일을 불러오고, flare class를 확인하는 함수
         Args:
-            filepath : str
+            file_path : str
                 이미지 파일 경로
         Returns:
             image : numpy.ndarray
                 불러온 이미지 데이터
-            flare_class : str
-                flare class
         """
-        image = imread(filepath)
-        flare_class = filepath.split(os.sep)[-2]
-        return image, flare_class
+        image = imread(f"{self.data_root}/{file_path}")
+        return image
 
 
 class ResizeData:
@@ -151,15 +157,22 @@ class CustomDataset(Dataset):
             is_train : bool
                 학습 데이터셋인지 테스트 데이터셋인지 여부
         """
-        if is_train is True :
-            pattern = f"{data_root}/Train/*/*/*.png"
+
+        if is_train:
+            csv = f"{data_root}/Train.csv"
         else :
-            pattern = f"{data_root}/Test/*/*/*.png"
-        self.list_data = glob.glob(pattern)
-        self.nb_data = len(self.list_data)
-        self.normalize = NormalizeData
-        self.resize = ResizeData(image_size)
-        self.totensor = ToTensor()
+            csv = f"{data_root}/Test.csv"
+
+        df = pd.read_csv(csv)
+        self.file_path = df["file_path"].values
+        self.flare_class = df["flare_class"].values
+        self.list_data = list(zip(self.file_path, self.flare_class))
+
+        self.load_data = LoadData(data_root)
+        self.make_label = MakeLabel()
+        self.normalize_data = NormalizeData()
+        self.resize_data = ResizeData(image_size)
+        self.to_tensor = ToTensor()
         
     def __len__(self):
         """
@@ -167,7 +180,7 @@ class CustomDataset(Dataset):
         Returns:
             int: 데이터셋의 크기
         """
-        return self.nb_data
+        return len(self.list_data)
     
     def __getitem__(self, idx):
         """
@@ -181,13 +194,16 @@ class CustomDataset(Dataset):
             label : torch.Tensor
                 레이블 데이터
         """
-        image, flare_class = LoadData()(self.list_data[idx])
-        image = self.normalize(image)
-        image = self.resize(image)
-        image = self.totensor(image)
 
-        label = MakeLabel()(flare_class)
-        label = self.totensor(label)
+        file_path, flare_class = self.list_data[idx]
+
+        image = self.load_data(file_path)
+        image = self.normalize_data(image)
+        image = self.resize_data(image)
+        image = self.to_tensor(image)
+
+        label = self.make_label(flare_class)
+        label = self.to_tensor(label)
         return image, label
 
 
