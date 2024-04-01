@@ -21,45 +21,4 @@ cbnu_2024
     ├── utils.py
     ├── train.py
     └── test.py
-
 ```
-<!-- 
-cbnu_2024 <br>
->tutorial <br>
->classification <br>
->>options.py <br>
->>pipeline.py <br>
->>networks.py <br>
->>utils.py <br>
->>train.py <br>
->>test.py <br>
->>tutorial_options.ipynb <br>
->>tutorial_pipeline.ipynb <br>
->>tutorial_networks.ipynb <br>
->>tutorial_train.ipynb <br>
->generation <br>
->>options.py <br>
->>pipeline.py <br>
->>networks.py <br>
->>utils.py <br>
->>train.py <br>
->>test.py <br>
-
-
-
-## PyTorch Tutorial
-
-## Classification
-
-├ options.py <br>
-├ pipeline.py <br>
-├ networks.py <br>
-├ utils.py <br>
-├ train.py <br>
-├ test.py <br>
-├ tutorial_options.ipynb <br>
-├ tutorial_pipeline.ipynb <br>
-├ tutorial_networks.ipynb <br>
-└ tutorial_train.ipynb <br>
-
-## Generation -->
