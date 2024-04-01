@@ -44,7 +44,7 @@ train.py를 이해하기 위한 설명 및 예제
 
 ## test.py
 
-## 순서
+## 실습 순서
 
 (1) tutorial_options.ipynb <br>
 (2) tutorial_pipeline.ipynb <br>
