@@ -46,7 +46,8 @@ train.py를 이해하기 위한 설명 및 예제
 
 ## 순서
 
-(1) tutorial_options.ipynb
-(2) tutorial_pipeline.ipynb
-(3) tutorial_networks.ipynb
-(4) tutorial_train.ipynb
+(1) tutorial_options.ipynb <br>
+(2) tutorial_pipeline.ipynb <br>
+(3) tutorial_networks.ipynb <br>
+(4) tutorial_train.ipynb <br> <br>
+위 순서로 실습하는 것을 추천함 <br>
