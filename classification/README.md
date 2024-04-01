@@ -1,4 +1,5 @@
 # Classification
+
 Solar Magnetogram을 이용한 Solar Flare Occurrence 예측 모델
 
 ```bash
