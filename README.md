@@ -14,13 +14,13 @@ cbnu_2024
 │   ├── tutorial_pipeline.ipynb
 │   ├── tutorial_networks.ipynb
 │   └── tutorial_train.py.ipynb
-├── generation
-│   ├── options.py
-│   ├── pipeline.py
-│   ├── networks.py
-│   ├── utils.py
-│   ├── train.py
-│   └── test.py
+└── generation
+    ├── options.py
+    ├── pipeline.py
+    ├── networks.py
+    ├── utils.py
+    ├── train.py
+    └── test.py
 
 ```
 <!-- 
