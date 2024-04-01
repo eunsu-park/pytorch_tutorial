@@ -1,8 +1,8 @@
 # CBNU / 2024 / 인공지능천문학 I
 
-cbnu_2024
+cbnu_2024 <br>
 ├ tutorial <br>
-│
+│ <br>
 ├ classification <br>
 │   ├ options.py <br>
 │   ├ pipeline.py <br>
@@ -14,7 +14,7 @@ cbnu_2024
 │   ├ tutorial_pipeline.ipynb <br>
 │   ├ tutorial_networks.ipynb <br>
 │   └ tutorial_train.ipynb <br>
-│
+│ <br>
 └ generation <br>
     ├ options.py <br>
     ├ pipeline.py <br>
