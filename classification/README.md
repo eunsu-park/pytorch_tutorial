@@ -20,17 +20,25 @@ classification
 
 ## tutorial_options.ipynb
 
+options.py을 이해하기 위한 설명 및 예제
+
 ## pipeline.py
 
 ## tutorial_pipeline.ipynb
+
+pipeline.py를 이해하기 위한 설명 및 예제
 
 ## networks.py
 
 ## tutorial_networks.ipynb
 
+networks.py를 이해하기 위한 설명 및 예제
+
 ## train.py
 
 ## tutorial_train.ipynb
+
+train.py를 이해하기 위한 설명 및 예제
 
 ## utils.py
 
