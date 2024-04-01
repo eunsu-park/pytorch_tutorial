@@ -1,7 +1,7 @@
 # CBNU / 2024 / 인공지능천문학 I
 
 cbnu_2024 <br>
-    tutorial <br>
+>    tutorial <br>
     classification <br>
         options.py <br>
         pipeline.py <br>
