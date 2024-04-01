@@ -5,21 +5,21 @@ cbnu_2024
 ├── tutorial
 ├── classification
 │   ├── options.py
-│   ├── pipeline.py
-│   ├── networks.py
-│   ├── utils.py
-│   ├── train.py
-│   ├── test.py
 │   ├── tutorial_options.ipynb
+│   ├── pipeline.py
 │   ├── tutorial_pipeline.ipynb
+│   ├── networks.py
 │   ├── tutorial_networks.ipynb
-│   └── tutorial_train.py.ipynb
+│   ├── train.py
+│   ├── tutorial_train.ipynb
+│   ├── utils.py
+│   └── test.py
 └── generation
     ├── options.py
     ├── pipeline.py
     ├── networks.py
-    ├── utils.py
     ├── train.py
+    ├── utils.py
     └── test.py
 ```
 
