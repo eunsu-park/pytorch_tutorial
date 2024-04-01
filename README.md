@@ -1,5 +1,7 @@
 # CBNU / 2024 / 인공지능천문학 I
 
+'''bash
+
 cbnu_2024 <br>
 ├── tutorial <br>
 ├── classification <br>
@@ -14,6 +16,8 @@ cbnu_2024 <br>
 │   ├── tutorial_networks.ipynb <br>
 │   └── tutorial_train.py.ipynb <br>
 ├── generation <br>
+
+'''
 <!-- 
 cbnu_2024 <br>
 >tutorial <br>
