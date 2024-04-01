@@ -1,11 +1,5 @@
 # CBNU / 2024 / 인공지능천문학 I
 
-## Classification
-
-Solar Magnetogram을 이용한 Solar Flare Occurrence 예측 모델
-
-## Generation
-
 ```bash
 cbnu_2024
 ├── tutorial
@@ -28,3 +22,11 @@ cbnu_2024
     ├── train.py
     └── test.py
 ```
+
+## Classification
+
+Solar Magnetogram을 이용한 Solar Flare Occurrence 예측 모델
+
+## Generation
+
+Solar EUV Image -> Solar Magnetogram Translation 모델
