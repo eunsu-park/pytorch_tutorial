@@ -18,11 +18,15 @@ classification
 
 ## options.py
 
+모델 구현/훈련/평가에 필요한 하이퍼파라미터의 정의하는 과정
+
 ## tutorial_options.ipynb
 
 options.py을 이해하기 위한 설명 및 예제
 
 ## pipeline.py
+
+모델에 데이터를 전달하는 과정
 
 ## tutorial_pipeline.ipynb
 
@@ -30,11 +34,15 @@ pipeline.py를 이해하기 위한 설명 및 예제
 
 ## networks.py
 
+훈련한 모델의 구조를 정의하는 과정
+
 ## tutorial_networks.ipynb
 
 networks.py를 이해하기 위한 설명 및 예제
 
 ## train.py
+
+모델을 훈련하는 과정
 
 ## tutorial_train.ipynb
 
@@ -42,7 +50,11 @@ train.py를 이해하기 위한 설명 및 예제
 
 ## utils.py
 
+기타 필요한 기능을 구현
+
 ## test.py
+
+모델을 평가하기 위한 과정
 
 ## 실습 순서
 
