@@ -3,15 +3,16 @@
 ## PyTorch Tutorial
 
 ## Classification
-├─options.py
-├─pipeline.py
-├─networks.py
-├─utils.py
-├─train.py
-├─test.py
-├─tutorial_options.ipynb
-├─tutorial_pipeline.ipynb
-├─tutorial_networks.ipynb
-└─tutorial_train.ipynb
+
+├─options.py <br>
+├─pipeline.py <br>
+├─networks.py <br>
+├─utils.py <br>
+├─train.py <br>
+├─test.py <br>
+├─tutorial_options.ipynb <br>
+├─tutorial_pipeline.ipynb <br>
+├─tutorial_networks.ipynb <br>
+└─tutorial_train.ipynb <br>
 
 ## Generation
