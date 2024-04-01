@@ -43,3 +43,10 @@ train.py를 이해하기 위한 설명 및 예제
 ## utils.py
 
 ## test.py
+
+## 순서
+
+(1) tutorial_options.ipynb
+(2) tutorial_pipeline.ipynb
+(3) tutorial_networks.ipynb
+(4) tutorial_train.ipynb
