@@ -111,6 +111,10 @@ def define_network(opt, state_dict=None, device=None):
     Args:
         opt : argparse.Namespace
             옵션 객체
+        state_dict : dict, default=None
+            네트워크의 가중치 값
+        device : torch.device, default=None
+            device 정보
     Returns:
         network : nn.Module
             네트워크
