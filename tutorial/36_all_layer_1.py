@@ -18,12 +18,12 @@ def get_num_params(model):
 
 inp1 = torch.randn(128, 3, 32, 32)
 model1 = []
-model1 += [nn.Conv2d(3, 32, kernel_size=3, padding=1)]
-model1 += [nn.BatchNorm2d(32)]
+model1 += [nn.Conv2d(3, 32, kernel_size=3, padding=1)] # 3*32*3*3 + 32 = 896
+model1 += [nn.BatchNorm2d(32)] # 2 * 32 = 64
 model1 += [nn.ReLU()]
 model1 += [nn.MaxPool2d(kernel_size=2, stride=2)]
-model1 += [nn.Conv2d(32, 64, kernel_size=3, padding=1)]
-model1 += [nn.BatchNorm2d(64)]
+model1 += [nn.Conv2d(32, 64, kernel_size=3, padding=1)] # 32*64*3*3 + 64 = 18496
+model1 += [nn.BatchNorm2d(64)] # 2 * 64 = 128
 model1 += [nn.ReLU()]
 model1 += [nn.MaxPool2d(kernel_size=2, stride=2)]
 model1 = nn.Sequential(*model1)
@@ -35,10 +35,10 @@ print("")
 
 inp2 = torch.randn(128, 4096)
 model2 = []
-model2 += [nn.Linear(4096, 4096)]
+model2 += [nn.Linear(4096, 4096)] # 4096*4096 + 4096 = 16781312
 model2 += [nn.ReLU()]
 model2 += [nn.Dropout(p=0.5)]
-model2 += [nn.Linear(4096, 10)]
+model2 += [nn.Linear(4096, 10)] # 4096*10 + 10 = 40970
 model2 += [nn.Softmax(dim=1)]
 model2 = nn.Sequential(*model2)
 print(model2)
