@@ -22,7 +22,7 @@ x_pt = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
 print(f"  NumPy    : sum={x_np.sum()}, mean={x_np.mean()}, max={x_np.max()}, min={x_np.min()}, std={x_np.std():.4f}")
 print(f"  PyTorch  : sum={x_pt.sum().item()}, mean={x_pt.mean().item()}, max={x_pt.max().item()}, "
       f"min={x_pt.min().item()}, std={x_pt.std().item():.4f}")
-# ⚠️  std 의 기본 보정값(ddof) 이 NumPy=0, PyTorch=1 (unbiased) 로 다를 수 있음.
+# 참고 : std 의 기본 보정값(ddof) 이 NumPy=0, PyTorch=1 (unbiased) 로 다를 수 있음.
 #     필요하면 NumPy 는 ddof=1, PyTorch 는 unbiased=False 로 맞춤.
 print("")
 
@@ -101,7 +101,7 @@ print(f"  PyTorch : prod={t.prod().item()}, norm={t.norm().item():.4f}, "
 # 자주 쓰는 reduce
 #     sum / mean / max / min / std / var / argmax / argmin / prod / norm
 #     (any, all 은 bool tensor 에 대한 reduce)
-# 함정
+# 차이점
 #     · NumPy.std 의 기본 ddof=0 (모분산), PyTorch.std 의 기본 unbiased=True (=ddof=1)
 #       → 정확히 같은 값을 원하면 둘 중 하나를 맞춰줘야 함
 #     · 학습 루프 패턴
