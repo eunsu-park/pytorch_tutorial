@@ -1,85 +1,110 @@
 # 07_reduce.py
-# Reduce 연산 — 차원을 줄이는 통계 함수
+# Reduce 연산 — 차원을 줄이는 통계 함수 (NumPy ↔ PyTorch)
 #
-# 학습 루프에서 자주 보는 패턴 :
-#   loss.mean()            ← scalar 로 줄이기
-#   output.argmax(dim=1)   ← 분류 예측 클래스
-#   acc = (pred == label).float().mean()
-# 이 챕터에서 dim, keepdim 인자의 의미를 정확히 익힌다.
+# ★ 인자 이름 차이
+#     NumPy   : axis=k, keepdims=True
+#     PyTorch : dim=k,  keepdim=True
+#   결과는 양쪽 동일.
 
+import numpy as np
 import torch
 
+np.random.seed(0)
 torch.manual_seed(0)
 
 # ────────────── (1) 전체 reduce — scalar 로 ──────────────
-# dim 을 지정하지 않으면 모든 원소에 대해 reduce → rank-0 tensor.
+# axis/dim 을 지정하지 않으면 모든 원소에 대해 reduce.
 print("[1] 전체 reduce")
 
-x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
-print(f"  x.sum()  = {x.sum().item()}")
-print(f"  x.mean() = {x.mean().item()}")
-print(f"  x.max()  = {x.max().item()}")
-print(f"  x.min()  = {x.min().item()}")
-print(f"  x.std()  = {x.std().item():.4f}")
+x_np = np.array([[1., 2., 3.], [4., 5., 6.]])
+x_pt = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+
+print(f"  NumPy    : sum={x_np.sum()}, mean={x_np.mean()}, max={x_np.max()}, min={x_np.min()}, std={x_np.std():.4f}")
+print(f"  PyTorch  : sum={x_pt.sum().item()}, mean={x_pt.mean().item()}, max={x_pt.max().item()}, "
+      f"min={x_pt.min().item()}, std={x_pt.std().item():.4f}")
+# ⚠️  std 의 기본 보정값(ddof) 이 NumPy=0, PyTorch=1 (unbiased) 로 다를 수 있음.
+#     필요하면 NumPy 는 ddof=1, PyTorch 는 unbiased=False 로 맞춤.
 print("")
 
-# ────────────── (2) 특정 차원만 reduce — dim ──────────────
-# dim=k 를 지정하면 그 차원이 사라짐.
-print("[2] dim 지정")
+# ────────────── (2) 특정 차원만 reduce ──────────────
+print("[2] axis= / dim= 지정")
 
-x = torch.tensor([[1., 2., 3.],
-                  [4., 5., 6.]])     # shape (2, 3)
-print(f"  x{tuple(x.shape)}")
-print(f"  x.sum(dim=0) = {x.sum(dim=0).tolist()}     ← 행 방향으로 합 (열별 합), shape={tuple(x.sum(dim=0).shape)}")
-print(f"  x.sum(dim=1) = {x.sum(dim=1).tolist()}        ← 열 방향으로 합 (행별 합), shape={tuple(x.sum(dim=1).shape)}")
+# NumPy : axis=
+print(f"  NumPy   : x.sum(axis=0) = {x_np.sum(axis=0).tolist()}     ← 행 방향 합 (열별), shape={x_np.sum(axis=0).shape}")
+print(f"            x.sum(axis=1) = {x_np.sum(axis=1).tolist()}        ← 열 방향 합 (행별), shape={x_np.sum(axis=1).shape}")
+
+# PyTorch : dim=
+print(f"  PyTorch : x.sum(dim=0)  = {x_pt.sum(dim=0).tolist()}     ← 같은 결과")
+print(f"            x.sum(dim=1)  = {x_pt.sum(dim=1).tolist()}")
 print("")
 
-# ────────────── (3) keepdim — 차원을 유지 ──────────────
-# keepdim=True 는 reduce 한 차원을 1로 남김. broadcasting 과 함께 쓰기 좋음.
-print("[3] keepdim")
+# ────────────── (3) keepdims / keepdim ──────────────
+# 줄어든 차원을 1로 남겨 broadcasting 과 같이 쓰기 좋게.
+print("[3] keepdims / keepdim")
 
-x = torch.randn(3, 4)
-m1 = x.mean(dim=1)                   # shape (3,)
-m2 = x.mean(dim=1, keepdim=True)     # shape (3, 1)
-print(f"  mean(dim=1)             → shape {tuple(m1.shape)}")
-print(f"  mean(dim=1, keepdim=T)  → shape {tuple(m2.shape)}")
+x_np = np.random.randn(3, 4)
+x_pt = torch.from_numpy(x_np)
 
-# 활용 : 행마다 평균을 빼서 정규화 (broadcasting 활용)
-x_centered = x - x.mean(dim=1, keepdim=True)   # (3, 4) - (3, 1) → (3, 4)
-print(f"  x - mean(keepdim) shape : {tuple(x_centered.shape)}    ← 각 행의 평균을 0으로")
+# NumPy
+m_np_no   = x_np.mean(axis=1)                  # (3,)
+m_np_keep = x_np.mean(axis=1, keepdims=True)   # (3, 1)
+print(f"  NumPy   : mean(axis=1)               → {m_np_no.shape}")
+print(f"            mean(axis=1, keepdims=T)    → {m_np_keep.shape}")
+
+# PyTorch
+m_pt_no   = x_pt.mean(dim=1)
+m_pt_keep = x_pt.mean(dim=1, keepdim=True)
+print(f"  PyTorch : mean(dim=1)                → {tuple(m_pt_no.shape)}")
+print(f"            mean(dim=1, keepdim=T)      → {tuple(m_pt_keep.shape)}")
+
+# 활용 : 행마다 평균 빼기 (broadcasting)
+x_np_centered = x_np - x_np.mean(axis=1, keepdims=True)
+x_pt_centered = x_pt - x_pt.mean(dim=1, keepdim=True)
+print(f"  행별 평균 제거 결과 동일 : {np.allclose(x_np_centered, x_pt_centered.numpy())}")
 print("")
 
-# ────────────── (4) argmax / argmin — 위치를 반환 ──────────────
+# ────────────── (4) argmax / argmin ──────────────
 # 분류 모델의 'pred = output.argmax(dim=1)' 패턴.
-print("[4] argmax / argmin")
+print("[4] argmax / argmin — 위치 반환")
 
-logits = torch.tensor([[2.0, 0.5, -1.0],
-                       [0.1, 1.5,  0.3],
-                       [0.0, 0.0,  3.0]])
-pred = logits.argmax(dim=1)          # 각 행에서 가장 큰 값의 위치
-print(f"  logits.argmax(dim=1) = {pred.tolist()}     ← 분류 모델의 예측 클래스")
+# NumPy
+logits_np = np.array([[2.0, 0.5, -1.0],
+                      [0.1, 1.5,  0.3],
+                      [0.0, 0.0,  3.0]])
+print(f"  NumPy   : np.argmax(logits, axis=1) = {np.argmax(logits_np, axis=1).tolist()}")
+
+# PyTorch
+logits_pt = torch.from_numpy(logits_np)
+pred = logits_pt.argmax(dim=1)
+print(f"  PyTorch : logits.argmax(dim=1)       = {pred.tolist()}")
 
 target = torch.tensor([0, 1, 2])
 acc = (pred == target).float().mean().item()
-print(f"  accuracy = {acc:.4f}")
+print(f"  분류 accuracy (PyTorch) = {acc:.4f}")
 print("")
 
-# ────────────── (5) 자주 쓰는 reduce 함수 한눈에 ──────────────
-# 모두 dim, keepdim 인자를 받음.
+# ────────────── (5) 그 외 자주 쓰는 reduce ──────────────
 print("[5] 그 외")
 
-x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
-print(f"  prod          = {x.prod().item()}      (모든 원소 곱)")
-print(f"  norm (p=2)    = {x.norm().item():.4f}")
-print(f"  any (조건)    = {(x > 3).any().item()}")
-print(f"  all (조건)    = {(x > 0).all().item()}")
+x = np.array([[1., 2., 3.], [4., 5., 6.]])
+print(f"  NumPy   : prod={x.prod()}, norm={np.linalg.norm(x):.4f}, "
+      f"any={(x>3).any()}, all={(x>0).all()}")
+
+t = torch.from_numpy(x)
+print(f"  PyTorch : prod={t.prod().item()}, norm={t.norm().item():.4f}, "
+      f"any={(t>3).any().item()}, all={(t>0).all().item()}")
 
 # ────────────── 비교 정리 ──────────────
-# - dim 미지정     : 모든 원소에 대해 reduce → rank-0 tensor (.item() 으로 파이썬 숫자)
-# - dim=k          : 차원 k 가 사라짐 (rank 가 1 줄어듦)
-# - keepdim=True   : 차원 k 가 크기 1 로 유지됨 (broadcasting 에 유용)
-# - 자주 쓰는 패턴
-#     loss.mean()                       — scalar 손실 (학습 표준)
-#     output.argmax(dim=1)              — 분류 예측 클래스
-#     (pred == label).float().mean()    — accuracy
-#     x.std(dim=1, keepdim=True)        — 행별 정규화 (BatchNorm 의 기초)
+# 인자 이름
+#     NumPy   : axis=k, keepdims=True
+#     PyTorch : dim=k,  keepdim=True
+# 자주 쓰는 reduce
+#     sum / mean / max / min / std / var / argmax / argmin / prod / norm
+#     (any, all 은 bool tensor 에 대한 reduce)
+# 함정
+#     · NumPy.std 의 기본 ddof=0 (모분산), PyTorch.std 의 기본 unbiased=True (=ddof=1)
+#       → 정확히 같은 값을 원하면 둘 중 하나를 맞춰줘야 함
+#     · 학습 루프 패턴
+#         loss.mean()                    — scalar 손실
+#         output.argmax(dim=1)            — 분류 예측 클래스
+#         (pred == label).float().mean()  — accuracy
