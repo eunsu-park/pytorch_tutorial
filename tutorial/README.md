@@ -1,6 +1,6 @@
 # Tutorial
 
-NumPy ↔ PyTorch 비교부터 신경망 학습 인프라까지를 **29 개 챕터**로 단계적으로 학습합니다.
+NumPy ↔ PyTorch 비교부터 신경망 학습 인프라까지를 **28 개 챕터**로 단계적으로 학습합니다.
 각 챕터는 단독 실행 가능 (`python tutorial/NN_xxx.py`) 하며, 주석 포함 100라인 안팎으로 작성되어 있습니다.
 
 ## 실습 환경
@@ -17,14 +17,14 @@ NumPy ↔ PyTorch 비교부터 신경망 학습 인프라까지를 **29 개 챕�
 |---:|---|---|
 | 01 | `01_tensor_basics.py` | rank/shape, 인덱싱, 생성 함수 (zeros/ones/arange/linspace/eye/randn) |
 | 02 | `02_dtype_device.py` | dtype 확인/지정/변경 + CPU/GPU device 이동 |
-| 03 | `03_numpy_torch.py` | numpy ↔ torch 양방향 변환 + 메모리 공유 함정 |
+| 03 | `03_numpy_torch.py` | numpy ↔ torch 양방향 변환 + 메모리 공유 동작 |
 | 04 | `04_indexing.py` | 슬라이싱, boolean mask, fancy indexing, 배치 추출 |
 
 ### Part 2 · 텐서 연산 (5 ~ 8)
 
 | # | 파일 | 주제 |
 |---:|---|---|
-| 05 | `05_elementwise_broadcast.py` | element-wise 연산 + broadcasting 규칙·함정 |
+| 05 | `05_elementwise_broadcast.py` | element-wise 연산 + broadcasting 규칙 |
 | 06 | `06_matmul.py` | 벡터 내적, 행렬 곱, 배치 행렬 곱, Linear 본질 |
 | 07 | `07_reduce.py` | sum/mean/max/argmax/std (`dim`, `keepdim`) |
 | 08 | `08_reshape.py` | reshape / view / `-1` / contiguous |
@@ -71,14 +71,13 @@ NumPy ↔ PyTorch 비교부터 신경망 학습 인프라까지를 **29 개 챕�
 | 24 | `24_model_sequential.py` | nn.Sequential 로 분류 모델 만들기 |
 | 25 | `25_model_module.py` | nn.Module 상속 + skip connection 예시 |
 
-### Part 8 · 학습 인프라 (26 ~ 29)
+### Part 8 · 학습 인프라 (26 ~ 28)
 
 | # | 파일 | 주제 |
 |---:|---|---|
 | 26 | `26_dataset_dataloader.py` | Dataset/DataLoader + random_split |
 | 27 | `27_loss_optimizer.py` | 손실 함수 비교 + 옵티마이저(SGD/Momentum/Adam) 비교 |
 | 28 | `28_save_load.py` | state_dict 저장/불러오기 / 체크포인트 |
-| 29 | `29_softmax_pitfall.py` | ⚠️ Softmax + CrossEntropyLoss 이중 적용 함정 |
 
 ## 핵심 함수 매핑 (NumPy ↔ PyTorch)
 
@@ -106,15 +105,15 @@ NumPy ↔ PyTorch 비교부터 신경망 학습 인프라까지를 **29 개 챕�
 | numpy ↔ torch | — | `torch.from_numpy` / `t.detach().cpu().numpy()` |
 | device 이동 | (없음 — CPU 전용) | `t.to(device)` / `t.cpu()` |
 
-## 핵심 함정 모음
+## 흔한 주의사항
 
 - **`*` 는 element-wise**: 행렬 곱은 `@` 또는 `matmul` ([06](06_matmul.py))
 - **기본 실수 dtype**: NumPy `float64` ↔ PyTorch `float32` ([02](02_dtype_device.py))
-- **Broadcasting 함정**: `(N,)` vs `(N, 1)` — 의도치 않은 `(N, N)` 발생 ([05](05_elementwise_broadcast.py))
+- **Broadcasting 차원**: `(N,)` vs `(N, 1)` — 결과가 다르므로 `.shape` 확인 ([05](05_elementwise_broadcast.py))
 - **메모리 공유**: reshape 결과 수정이 원본에도 반영 — `.clone()` 필요 ([12](12_view_vs_copy.py))
 - **`view` vs `reshape`**: view 는 contiguous 일 때만 ([08](08_reshape.py))
 - **Dropout / BN 의 train/eval 차이**: 평가 직전 `model.eval()` 호출 ([19, 23](19_dropout.py))
-- **Softmax + CrossEntropyLoss**: 이중 적용 함정 — 모델 출력은 logit ([29](29_softmax_pitfall.py))
+- **CrossEntropyLoss 입력**: logit 을 받음. 모델 마지막에 `nn.Softmax` 를 두지 않음 ([27](27_loss_optimizer.py))
 
 ## 실습 방법
 
