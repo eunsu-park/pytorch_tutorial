@@ -6,14 +6,15 @@ PyTorch 입문부터 실제 천문학 응용 모델까지 단계적으로 학습
 
 ```bash
 .
-├── tutorial/                # PyTorch 기초 (1~44 챕터)
+├── tutorial/                # PyTorch 기초 (28 챕터)
 ├── classification/          # Solar Magnetogram → Solar Flare 발생 예측
 └── generation/              # Solar EUV → Solar Magnetogram 변환 (Pix2Pix)
 ```
 
 ## tutorial
 
-NumPy ↔ PyTorch 비교(01~15), 회귀 학습 흐름(16~18), 신경망 레이어(19~38), 학습 도구·함정(39~44).
+NumPy ↔ PyTorch 텐서 기본/연산/형태 변환(01~12), autograd·magic_method(13~14),
+회귀 학습 흐름(15~16), 신경망 레이어(17~22), 모델 조립(23~25), 학습 인프라(26~28).
 자세한 챕터 목록은 [`tutorial/README.md`](tutorial/README.md) 참고.
 
 ## classification
@@ -38,16 +39,10 @@ pip install torch numpy matplotlib pandas imageio scikit-image
 
 ## 실습 권장 순서
 
-1. `tutorial/01` ~ `15` : NumPy ↔ PyTorch 차이 익히기
-2. `tutorial/16` ~ `18` : 같은 회귀 문제를 세 단계 추상화로 풀기
-3. `tutorial/19` ~ `38` : 신경망 구성요소
-4. `tutorial/39` ~ `44` : 학습 도구와 흔한 함정
-5. `classification/` : 실제 분류 모델 학습/평가
-6. `generation/` : Pix2Pix 기반 영상 변환
-
-## 함정 학습 (★ 중요)
-
-`tutorial/44_softmax_crossentropy.py` 는 분류 모델에서 가장 흔한 실수인
-`nn.Softmax` + `nn.CrossEntropyLoss` 이중 적용을 보여줍니다.
-`classification/networks.py` 에 같은 함정이 의도적으로 보존되어 있으니
-44 챕터 학습 후 직접 찾아보세요.
+1. `tutorial/01` ~ `12` : 텐서 기본·연산·형태 변환
+2. `tutorial/13` ~ `14` : autograd 와 nn.Module 의 기반 매직 메서드
+3. `tutorial/15` ~ `16` : 같은 회귀 문제를 두 단계 추상화로 풀기
+4. `tutorial/17` ~ `25` : 신경망 레이어와 모델 조립
+5. `tutorial/26` ~ `28` : Dataset/DataLoader, 손실/옵티마이저, 모델 저장
+6. `classification/` : 실제 분류 모델 학습/평가
+7. `generation/` : Pix2Pix 기반 영상 변환
