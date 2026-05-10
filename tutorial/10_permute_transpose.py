@@ -1,7 +1,7 @@
 # 10_permute_transpose.py
 # 차원 순서 변경 — NumPy ↔ PyTorch
 #
-# ⚠️ 주의 : 같은 함수 이름 'transpose' 가 NumPy 와 PyTorch 에서 의미가 다르다.
+# 주의 : 같은 함수 이름 'transpose' 가 NumPy 와 PyTorch 에서 의미가 다르다.
 #     NumPy   의 np.transpose : 모든 차원 재배치 (= PyTorch 의 permute)
 #     PyTorch 의 torch.transpose : 두 차원만 교환
 
@@ -48,7 +48,7 @@ print(f"            x.t() (2D 단축)            : {tuple(x_pt_2d.shape)} → {t
 print(f"            x.T (NumPy 와 같은 표기)   : {tuple(x_pt_2d.shape)} → {tuple(x_pt_2d.T.shape)}")
 print("")
 
-# ────────────── (3) ⚠️ 같은 이름, 다른 의미 ──────────────
+# ────────────── (3) 같은 이름, 다른 의미 ──────────────
 # 'transpose' 라는 이름이 두 라이브러리에서 다른 의미를 가진다는 점이 핵심.
 print("[3] transpose 의미 차이")
 
@@ -82,7 +82,7 @@ print(f"  PyTorch : (H, W, C) {tuple(img_pt.shape)} → (C, H, W) {tuple(img_chw
 # 두 차원 교환                    np.swapaxes(x, a, b)               torch.transpose(t, a, b)
 # 2D 전치 (단축)                  x.T                                t.T  /  t.t()
 #
-# ⚠️ 함정 : 'transpose' 의 의미가 다름
+# 주의 : 'transpose' 의 의미가 다름
 #     NumPy   의 np.transpose      = '모든 차원 재배치'  (PyTorch 의 permute)
 #     PyTorch 의 torch.transpose   = '두 차원 교환'     (NumPy 의 swapaxes)
 #
