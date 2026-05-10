@@ -22,7 +22,7 @@ for name, t in [("torch.tensor", t1), ("torch.Tensor", t2),
     print(f"  {name:<18s} → dtype={t.dtype}, value={t.tolist()}")
 print("")
 
-# 메모리 공유 함정 — from_numpy 결과는 numpy 쪽 수정에 영향을 받음
+# 메모리 공유 동작 — from_numpy 결과는 numpy 쪽 수정에 영향을 받음
 arr = np.array([1, 2, 3])
 ten = torch.from_numpy(arr)
 arr[0] = 99
