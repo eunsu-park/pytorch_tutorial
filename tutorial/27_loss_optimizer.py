@@ -36,7 +36,7 @@ logits_mc = torch.tensor([[2.0, 0.5, -1.0],
                           [0.0, 0.0,  3.0]])
 y_mc      = torch.tensor([0, 1, 2])         # 정답 클래스 인덱스 (one-hot 아님)
 print(f"  CrossEntropyLoss(logits, y)  : {nn.CrossEntropyLoss()(logits_mc, y_mc).item():.4f}    다중분류 (softmax 포함)")
-print("⚠️  CrossEntropyLoss 는 logit 을 받음. 모델 마지막에 Softmax 를 두지 말 것 (29 챕터).")
+print("CrossEntropyLoss 는 logit 을 받음. 모델 마지막에 Softmax 를 두지 않는다 (내부에서 log_softmax 처리).")
 print("")
 
 # ────────────── (2) 옵티마이저 — SGD / Momentum / Adam ──────────────
