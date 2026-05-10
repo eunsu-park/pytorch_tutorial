@@ -1,15 +1,15 @@
-# 42_save_load.py
+# 28_save_load.py
 # 모델 저장 / 불러오기 — state_dict 기반
 #
-# 학습 목표
-#   학습이 끝난 모델을 디스크에 저장하고 다시 불러오는 방법을 익힌다.
-#   classification/train.py / generation/train.py 가 이 패턴을 사용 중이므로 참고.
+# 표준 패턴 :  텐서만 담은 dict (state_dict) 를 저장 → 같은 구조의 모델에 불러오기.
+# classification/train.py / generation/train.py 가 이 패턴을 사용 중.
 
 import os
 import torch
 import torch.nn as nn
 
 torch.manual_seed(0)
+
 
 # ────────────── 모델 정의 ──────────────
 class SimpleNet(nn.Module):
@@ -37,7 +37,7 @@ print("[2] 저장 후 불러오기")
 
 save_path = "/tmp/_demo_simplenet.pt"
 
-# 권장 패턴 : state_dict 만 저장 (파이썬 객체 전체가 아니라 텐서 dict)
+# 권장 패턴 : state_dict 만 저장
 torch.save(model.state_dict(), save_path)
 print(f"saved → {save_path}, file size = {os.path.getsize(save_path)} bytes")
 
@@ -51,11 +51,11 @@ x = torch.randn(2, 8)
 with torch.no_grad():
     y1 = model(x)
     y2 = new_model(x)
-print(f"두 모델의 출력 동일 여부 : {torch.allclose(y1, y2)}")
+print(f"두 모델 출력 동일 여부 : {torch.allclose(y1, y2)}")
 print("")
 
-# ────────────── (3) optimizer 와 epoch 도 함께 저장 (체크포인트) ──────────────
-print("[3] 체크포인트 — 학습 재개를 위한 종합 저장")
+# ────────────── (3) 체크포인트 — 학습 재개를 위해 종합 저장 ──────────────
+print("[3] 체크포인트")
 
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 # 한 step 흉내
@@ -66,15 +66,22 @@ optimizer.step()
 
 ckpt_path = "/tmp/_demo_checkpoint.pt"
 torch.save({
-    "epoch": 5,
-    "network": model.state_dict(),
+    "epoch":     5,
+    "network":   model.state_dict(),
     "optimizer": optimizer.state_dict(),
-    "loss": loss.item(),
+    "loss":      loss.item(),
 }, ckpt_path)
 
 ckpt = torch.load(ckpt_path, map_location="cpu")
-print(f"checkpoint keys : {list(ckpt.keys())}")
-print(f"epoch : {ckpt['epoch']}, loss : {ckpt['loss']:.4f}")
+print(f"  체크포인트 키 : {list(ckpt.keys())}")
+print(f"  epoch={ckpt['epoch']}, loss={ckpt['loss']:.4f}")
+
+# 학습을 재개할 때
+new_model = SimpleNet()
+new_model.load_state_dict(ckpt["network"])
+new_optimizer = torch.optim.Adam(new_model.parameters(), lr=1e-3)
+new_optimizer.load_state_dict(ckpt["optimizer"])
+print(f"  재개 시점 epoch = {ckpt['epoch']}")
 print("")
 
 # 정리
@@ -82,8 +89,11 @@ os.remove(save_path)
 os.remove(ckpt_path)
 
 # ────────────── 비교 정리 ──────────────
-# - 권장        : torch.save(model.state_dict(), path) → 텐서만 저장 (안전, 호환성↑)
-# - 비권장      : torch.save(model, path) → 클래스 정의 자체를 함께 저장 (코드 변경 시 깨짐)
-# - 학습 재개   : {"network": ..., "optimizer": ..., "epoch": ...} 형태의 dict 로 묶어 저장
+# - 권장        : torch.save(model.state_dict(), path) → 텐서만 저장 (안전, 호환)
+# - 비권장      : torch.save(model, path)              → 클래스 정의까지 저장 (코드 변경 시 깨짐)
+# - 학습 재개   : {"network": ..., "optimizer": ..., "epoch": ...} 형태로 묶어 저장
 # - 불러올 때   : 같은 구조의 모델 인스턴스를 먼저 만들고 load_state_dict 호출
 # - device 주의 : torch.load(path, map_location=device) 로 cpu/gpu 환경 차이 대응
+#
+# best 모델 저장 패턴 (classification/train.py 참고)
+#   매 epoch 검증 → val_loss 최저 갱신 시에만 저장 → 학습 종료 후 best 모델로 평가
