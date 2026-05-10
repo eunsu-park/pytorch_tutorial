@@ -1,4 +1,4 @@
-# 28_save_load.py
+# 14_save_load.py
 # 모델 저장 / 불러오기 — state_dict 기반
 #
 # 표준 패턴 :  텐서만 담은 dict (state_dict) 를 저장 → 같은 구조의 모델에 불러오기.

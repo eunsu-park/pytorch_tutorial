@@ -1,4 +1,4 @@
-# 17_linear.py
+# 03_linear.py
 # Linear 레이어 — 단일 사용 + Sequential 로 쌓기
 #
 # 핵심 공식
@@ -62,9 +62,9 @@ print("")
 # ────────────── 비교 정리 ──────────────
 # - nn.Linear(in, out)
 #     · 내부적으로 weight (out, in), bias (out,) 등록
-#     · forward 는 사실상 x @ weight.T + bias (06 챕터 참고)
+#     · forward 는 사실상 x @ weight.T + bias (tensor/06 챕터 참고)
 #     · 입력 마지막 차원이 in_features 와 같아야 함, 배치 차원은 가변
 # - 파라미터 수 공식 :  in * out + out   (bias=False 면 -out)
 # - Sequential
 #     · 내부 모듈을 등록 순서대로 호출
-#     · 짧고 단순한 모델에 적합. 분기/skip-connection 은 nn.Module 상속 (25 챕터)
+#     · 짧고 단순한 모델에 적합. 분기/skip-connection 은 nn.Module 상속 (11 챕터)

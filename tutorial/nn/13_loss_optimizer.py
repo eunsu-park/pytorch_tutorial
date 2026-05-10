@@ -1,7 +1,7 @@
-# 27_loss_optimizer.py
+# 13_loss_optimizer.py
 # 손실 함수 + 옵티마이저 — 학습 루프에서 한 짝으로 동작하는 두 요소
 #
-# 학습 표준 4 단계 (16 챕터에서 본 그대로)
+# 학습 표준 4 단계 (02 챕터에서 본 그대로)
 #     optimizer.zero_grad()
 #     output = model(x)
 #     loss   = loss_fn(output, y)

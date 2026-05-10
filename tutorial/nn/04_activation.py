@@ -1,4 +1,4 @@
-# 18_activation.py
+# 04_activation.py
 # 활성 함수(Activation Function) — 곡선 시각화 + 모델 안 사용
 #
 # 활성 함수가 없으면 신경망은 결국 선형 변환의 합성이라 표현력이 제한된다.

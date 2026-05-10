@@ -1,4 +1,4 @@
-# 23_pool_norm.py
+# 09_pool_norm.py
 # Pooling (MaxPool2d) + Normalization (BatchNorm2d)
 #
 # 두 레이어 모두 학습 가능 파라미터가 거의 없거나(Pool=0) 매우 적지만(BN=2*C),

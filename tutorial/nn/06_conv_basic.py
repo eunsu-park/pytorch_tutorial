@@ -1,4 +1,4 @@
-# 20_conv_basic.py
+# 06_conv_basic.py
 # Convolution 기본 — kernel_size, in_channels, out_channels
 #
 # 핵심 파라미터 공식
@@ -63,7 +63,7 @@ print("")
 
 # ────────────── (3) 입력 영상 크기와 파라미터 수 ──────────────
 # 입력의 H, W 가 바뀌어도 Conv 의 파라미터 수는 변하지 않음 (커널 크기만 영향).
-# 단 출력의 H, W 는 입력에 따라 달라짐. 이는 21 챕터(padding/stride) 에서 자세히.
+# 단 출력의 H, W 는 입력에 따라 달라짐. 이는 07 챕터(padding/stride) 에서 자세히.
 print("[3] 입력 크기 ↔ 파라미터 수 무관")
 
 conv = nn.Conv2d(1, 1, kernel_size=3)

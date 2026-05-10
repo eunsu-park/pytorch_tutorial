@@ -1,9 +1,9 @@
-# 16_regression_nn.py
+# 02_regression_nn.py
 # 선형 회귀 — nn.Linear + nn.MSELoss 로 가장 추상화된 형태
 #
-# 15 와 비교
-#   15 : w, b 두 tensor 를 직접 만들고 곱·합으로 모델을 표현
-#   16 : nn.Linear(1, 1) 한 줄로 동일한 모델을 정의 (내부에 weight, bias 자동 등록)
+# 01 과 비교
+#   01 : w, b 두 tensor 를 직접 만들고 곱·합으로 모델을 표현
+#   02 : nn.Linear(1, 1) 한 줄로 동일한 모델을 정의 (내부에 weight, bias 자동 등록)
 # 손실 함수도 직접 구현 → nn.MSELoss() 로 교체.
 
 import numpy as np

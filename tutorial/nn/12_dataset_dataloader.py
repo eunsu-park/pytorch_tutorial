@@ -1,8 +1,8 @@
-# 26_dataset_dataloader.py
+# 12_dataset_dataloader.py
 # Dataset / DataLoader / random_split — 학습 데이터 공급 파이프라인
 #
-# 14 챕터의 매직 메서드 (__len__, __getitem__) 가 여기서 직접 사용된다.
-# 04 챕터의 수동 슬라이싱·셔플이 어떻게 한 줄(DataLoader) 로 자동화되는지 본다.
+# tensor/14 챕터의 매직 메서드 (__len__, __getitem__) 가 여기서 직접 사용된다.
+# tensor/04 챕터의 수동 슬라이싱·셔플이 어떻게 한 줄(DataLoader) 로 자동화되는지 본다.
 
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split

@@ -1,4 +1,4 @@
-# 21_conv_size.py
+# 07_conv_size.py
 # Convolution 출력 크기 — padding, stride, 그리고 공식
 #
 # ★ 출력 크기 공식 (정사각형 가정)
@@ -84,7 +84,7 @@ print(f"  H_out = (224 + 2*3 - 7) / 2 + 1 = {expected_size(224, 7, 3, 2)}    ←
 # 자주 쓰는 조합
 #   kernel=3, padding=1                  → 크기 보존        (특징 추출 표준)
 #   kernel=3, padding=1, stride=2        → 크기 1/2          (다운샘플링)
-#   kernel=1                              → 크기 그대로, 채널만 변환 (다음 22 챕터)
+#   kernel=1                              → 크기 그대로, 채널만 변환 (다음 08 챕터)
 #   kernel=4, padding=1, stride=2        → 크기 1/2          (Pix2Pix Discriminator 표준)
 #
 # 파라미터 수는 padding/stride 와 무관 — kernel_size, in_channels, out_channels 만 영향.

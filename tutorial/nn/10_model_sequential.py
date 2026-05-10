@@ -1,4 +1,4 @@
-# 24_model_sequential.py
+# 10_model_sequential.py
 # 모델 조립 ① — nn.Sequential 로 분류 모델 만들기
 #
 # Conv → BN → ReLU → MaxPool 블록을 두 번 쌓고, Flatten → Linear → Linear 로 마무리.
@@ -69,6 +69,6 @@ print(f"  end-to-end : {tuple(inp.shape)} → {tuple(out.shape)}")
 # ────────────── 비교 정리 ──────────────
 # - Sequential 은 '입력 → 레이어 1 → 레이어 2 → ... → 출력' 의 단일 흐름만 표현.
 # - 분기/skip connection (예: ResNet 의 + 연산, U-Net 의 cat) 은 Sequential 로 못 만듦.
-#   → 다음 챕터(25 nn.Module) 에서 forward 를 직접 작성해 표현.
+#   → 다음 챕터(11 nn.Module) 에서 forward 를 직접 작성해 표현.
 # - nn.Flatten() : 배치 차원 유지하며 나머지 차원을 모두 평탄화. CNN→Linear 연결 표준.
 # - 분류 모델의 마지막 Linear 출력에 nn.Softmax 를 두지 않는다 (CrossEntropyLoss 가 내부에서 처리).

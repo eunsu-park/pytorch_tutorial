@@ -1,4 +1,4 @@
-# 15_regression_manual.py
+# 01_regression_manual.py
 # 선형 회귀 — 수동 vs autograd 비교
 #
 # 학습 흐름

@@ -1,4 +1,4 @@
-# 19_dropout.py
+# 05_dropout.py
 # Dropout — 학습 시 일부 뉴런을 무작위로 0 으로
 #
 # 핵심

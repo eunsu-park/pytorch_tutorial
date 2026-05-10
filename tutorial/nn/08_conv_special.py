@@ -1,4 +1,4 @@
-# 22_conv_special.py
+# 08_conv_special.py
 # Convolution 응용 — Linear vs Conv, Receptive Field, 1x1 Conv
 #
 # 학습 목표

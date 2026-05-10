@@ -1,9 +1,9 @@
-# 25_model_module.py
+# 11_model_module.py
 # 모델 조립 ② — nn.Module 상속 (분기/조건부 흐름이 가능한 표준 패턴)
 #
 # Sequential 은 단일 흐름만. 실전 모델 (ResNet 의 skip, U-Net 의 cat 등) 은 nn.Module 을 상속해
 # forward 를 직접 작성해야 한다.
-# 14 챕터에서 본 매직 메서드 (__init__, __call__) 가 여기서 활용된다.
+# tensor/14 챕터에서 본 매직 메서드 (__init__, __call__) 가 여기서 활용된다.
 
 import torch
 import torch.nn as nn
