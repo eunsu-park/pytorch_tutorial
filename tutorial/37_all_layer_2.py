@@ -42,7 +42,7 @@ class MyModel(nn.Module): # nn.Module을 상속받아 모델을 정의
         model += [nn.ReLU()]
         model += [nn.Dropout(p=0.5)]
         model += [nn.Linear(4096, self.num_classes)]
-        model += [nn.Softmax(dim=1)]
+        model += [nn.Softmax(dim=1)]   # ⚠️ CrossEntropyLoss 와 이중 적용 함정 — tutorial/44 참고
         self.classifier = nn.Sequential(*model)
 
     def forward(self, x): # nn.Module을 상속받았기 때문에 forward 함수를 구현해야 모델로 작동
