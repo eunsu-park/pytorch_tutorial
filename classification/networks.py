@@ -75,14 +75,8 @@ class CustomNetwork(nn.Module):
     def define_classifier(self):
         """
         classifier를 정의하는 함수
-
-        ⚠️  학습 함정 (의도적으로 보존됨, 학습 후 직접 발견하도록)
-        ───────────────────────────────────────────────────────────
-        아래 마지막 줄의 nn.Softmax(dim=1) 은 train.py 의 nn.CrossEntropyLoss()
-        와 함께 쓰면 'softmax 가 두 번 적용' 되는 함정에 해당함.
-        - nn.CrossEntropyLoss 는 내부적으로 log_softmax + NLLLoss 를 적용함
-        - 따라서 모델 출력에 softmax 를 별도로 거치면 학습이 비정상이 됨
-        자세한 설명과 비교 실험은 tutorial/44_softmax_crossentropy.py 참고.
+        모델 출력은 logit. nn.CrossEntropyLoss 는 내부적으로 log_softmax 를 적용하므로
+        모델 마지막에 nn.Softmax 를 두지 않는다.
         """
         model = []
 
@@ -92,8 +86,7 @@ class CustomNetwork(nn.Module):
         model += [nn.Linear(4096, 4096),
                   nn.ReLU(inplace=True),
                   nn.Dropout()]
-        model += [nn.Linear(4096, self.num_classes),
-                  nn.Softmax(dim=1)]   # ⚠️ CrossEntropyLoss 와 이중 적용 — 함정 (44 챕터 참고)
+        model += [nn.Linear(4096, self.num_classes)]
 
         self.classifier = nn.Sequential(*model)
 
