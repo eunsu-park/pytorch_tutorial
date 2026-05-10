@@ -1,44 +1,62 @@
 # 05_elementwise_broadcast.py
-# Element-wise 연산과 Broadcasting
+# Element-wise 연산과 Broadcasting — NumPy ↔ PyTorch
+# 두 라이브러리 모두 거의 동일한 문법과 규칙을 따른다.
 
+import numpy as np
 import torch
 
+np.random.seed(0)
 torch.manual_seed(0)
 
-# ────────────── (1) Element-wise 연산 ──────────────
-# 같은 shape 끼리 +, -, *, /, ** 등은 위치별로 계산.
-print("[1] Element-wise")
+# ────────────── (1) Element-wise — 같은 shape 끼리 ──────────────
+print("[1] Element-wise (양쪽 동일 동작)")
 
-a = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
-b = torch.tensor([[10., 10., 10.], [20., 20., 20.]])
+# NumPy
+a_np = np.array([[1., 2., 3.], [4., 5., 6.]])
+b_np = np.array([[10., 10., 10.], [20., 20., 20.]])
+print("  NumPy   a + b :\n", a_np + b_np)
+print("  NumPy   a * b :\n", a_np * b_np)
 
-print("a + b\n", a + b)
-print("a * b (element-wise)\n", a * b)
+# PyTorch
+a_pt = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+b_pt = torch.tensor([[10., 10., 10.], [20., 20., 20.]])
+print("  PyTorch a + b :\n", a_pt + b_pt)
+print("  PyTorch a * b :\n", a_pt * b_pt)
 print("⚠️  '*' 는 element-wise. 행렬 곱이 아님 — 행렬 곱은 06 챕터의 '@' 또는 matmul.")
 print("")
 
-# ────────────── (2) Broadcasting 의 규칙 ──────────────
+# ────────────── (2) Broadcasting 규칙 ──────────────
 # shape 의 끝에서부터 비교해 각 위치가 (같거나 / 한쪽이 1) 이면 자동 확장.
+# NumPy 와 PyTorch 의 규칙은 동일.
 print("[2] Broadcasting 규칙")
 
-# (3, 1) + (1, 4) → (3, 4) : 양쪽이 서로의 모자란 차원을 채움
-a = torch.tensor([[1.], [2.], [3.]])           # (3, 1)
-b = torch.tensor([[10., 20., 30., 40.]])       # (1, 4)
-c = a + b                                      # (3, 4)
-print(f"  (3, 1) + (1, 4) = {tuple(c.shape)}")
-print(c)
+# NumPy : (3, 1) + (1, 4) → (3, 4)
+a_np = np.array([[1.], [2.], [3.]])           # (3, 1)
+b_np = np.array([[10., 20., 30., 40.]])       # (1, 4)
+print(f"  NumPy   (3,1) + (1,4) = {(a_np + b_np).shape}")
+print(a_np + b_np)
+
+# PyTorch : 동일 결과
+a_pt = torch.tensor([[1.], [2.], [3.]])
+b_pt = torch.tensor([[10., 20., 30., 40.]])
+print(f"  PyTorch (3,1) + (1,4) = {tuple((a_pt + b_pt).shape)}")
+print(a_pt + b_pt)
 print("")
 
-# 신경망 표준 패턴 : (N, D) + (D,) → 'bias 더하기'
-batch = torch.randn(5, 3)
-bias  = torch.tensor([1., 2., 3.])             # (3,) 가 (1, 3) 으로 자동 확장
-print(f"  (N, D) + (D,) : (5, 3) + (3,) = {tuple((batch + bias).shape)}    ← y = x @ W + b 패턴")
+# 신경망 표준 패턴 : (N, D) + (D,) — 'bias 더하기'
+batch_np = np.random.randn(5, 3)
+bias_np  = np.array([1., 2., 3.])
+batch_pt = torch.randn(5, 3)
+bias_pt  = torch.tensor([1., 2., 3.])
+print(f"  NumPy   (N,D) + (D,) : {(batch_np + bias_np).shape}")
+print(f"  PyTorch (N,D) + (D,) : {tuple((batch_pt + bias_pt).shape)}    ← y = x @ W + b 패턴")
 print("")
 
 # ────────────── (3) ★ 함정 — (N,) vs (N, 1) ──────────────
-# 같아 보이지만 broadcasting 결과는 전혀 다름.
+# 양쪽 라이브러리 모두 이 함정이 있다.
 print("[3] 함정 : (N,) 과 (N, 1)")
 
+# PyTorch 로 시연 (NumPy 도 결과 동일)
 v_1d  = torch.tensor([1., 2., 3., 4.])         # shape (4,)
 v_col = v_1d.view(-1, 1)                       # shape (4, 1)
 v_row = v_1d.view(1, -1)                       # shape (1, 4)
@@ -55,15 +73,22 @@ print(f"  v_col + v_col  : (4,1) + (4,1) = {tuple((v_col + v_col).shape)}")
 print("→ 차원이 미묘하게 다른 두 텐서를 더하기 전에 항상 .shape 를 확인할 것.")
 print("")
 
+# NumPy 에서도 똑같이 함정 발생
+v_np_1d  = np.array([1., 2., 3., 4.])
+v_np_col = v_np_1d.reshape(-1, 1)
+v_np_row = v_np_1d.reshape(1, -1)
+print(f"  NumPy  : (4,1) + (1,4) = {(v_np_col + v_np_row).shape}    ← 동일한 함정")
+print("")
+
 # ────────────── (4) 명시적 broadcast 확인 ──────────────
-# torch.broadcast_shapes 로 결과 shape 미리 계산 가능
-shape = torch.broadcast_shapes((3, 1, 5), (1, 4, 5))
-print(f"  broadcast_shapes((3,1,5), (1,4,5)) = {shape}")
+# 결과 shape 를 미리 계산하고 싶을 때
+print("[4] broadcast shape 미리 확인")
+print(f"  NumPy   : np.broadcast_shapes((3,1,5), (1,4,5))    = {np.broadcast_shapes((3,1,5), (1,4,5))}")
+print(f"  PyTorch : torch.broadcast_shapes((3,1,5), (1,4,5)) = {torch.broadcast_shapes((3,1,5), (1,4,5))}")
 
 # ────────────── 비교 정리 ──────────────
-# - element-wise : 양쪽 라이브러리 동일. '*' 는 절대 행렬 곱이 아님.
-# - broadcasting 규칙 : 끝 차원부터 (같음 or 한쪽이 1) 이면 자동 확장
-# - 흔한 함정 :
-#     · (N,) vs (N, 1) — outer-sum 으로 (N, N) 만들 수 있음
-#     · (1, N) vs (N,) — 결과 같지만 의도 명확화를 위해 view/unsqueeze 권장
-# - 의도 명확화 : reshape / unsqueeze 로 차원을 명시적으로 맞추는 습관
+# - element-wise (+, -, *, /, **) : NumPy 와 PyTorch 가 완전히 동일 동작
+# - '*' 는 절대 행렬 곱이 아님 (양쪽 모두) — 행렬 곱은 06 챕터
+# - broadcasting 규칙 동일 : 끝 차원부터 (같음 or 한쪽이 1) 이면 자동 확장
+# - (N,) vs (N, 1) 함정도 양쪽 모두 동일하게 발생
+# - 의도 명확화 : reshape / unsqueeze / expand_dims 로 차원을 맞추는 습관
