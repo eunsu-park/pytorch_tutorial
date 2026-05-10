@@ -1,5 +1,11 @@
 # 38_magic_method.py
-# Magic Method
+# Magic Method — PyTorch 의 nn.Module 도 이 매직 메서드들을 활용한다
+#
+# 다음 챕터들과의 연결
+#   - __init__ : 모델 정의 (37_all_layer_2.py 의 MyModel.__init__)
+#   - __call__ : model(x) 호출 시 forward 가 자동 실행되는 이유
+#   - __len__, __getitem__ : Dataset 클래스가 구현해야 하는 메서드 (41 챕터에서 본격적으로)
+#   - __repr__ : print(model) 결과를 보기 좋게 만드는 메서드
 
 class CustomL2UString:
 
