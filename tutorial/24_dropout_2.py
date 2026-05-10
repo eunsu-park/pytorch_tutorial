@@ -1,5 +1,7 @@
-# 24_drouput_2.py
-# Dropout Layer
+# 24_dropout_2.py
+# Dropout Layer — train()/eval() 모드에 따른 동작 차이
+# 주의 : Sequential 안에서 inplace=True 는 입력을 직접 변형하므로 디버깅이 어려워짐.
+#        실전에서는 inplace=False(기본값) 를 권장.
 
 import torch
 import torch.nn as nn
