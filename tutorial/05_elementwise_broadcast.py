@@ -22,7 +22,7 @@ a_pt = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
 b_pt = torch.tensor([[10., 10., 10.], [20., 20., 20.]])
 print("  PyTorch a + b :\n", a_pt + b_pt)
 print("  PyTorch a * b :\n", a_pt * b_pt)
-print("⚠️  '*' 는 element-wise. 행렬 곱이 아님 — 행렬 곱은 06 챕터의 '@' 또는 matmul.")
+print("'*' 는 element-wise. 행렬 곱이 아님 — 행렬 곱은 06 챕터의 '@' 또는 matmul.")
 print("")
 
 # ────────────── (2) Broadcasting 규칙 ──────────────
@@ -52,9 +52,9 @@ print(f"  NumPy   (N,D) + (D,) : {(batch_np + bias_np).shape}")
 print(f"  PyTorch (N,D) + (D,) : {tuple((batch_pt + bias_pt).shape)}    ← y = x @ W + b 패턴")
 print("")
 
-# ────────────── (3) ★ 함정 — (N,) vs (N, 1) ──────────────
-# 양쪽 라이브러리 모두 이 함정이 있다.
-print("[3] 함정 : (N,) 과 (N, 1)")
+# ────────────── (3) (N,) vs (N, 1) — 차원이 미묘하게 다른 두 텐서 ──────────────
+# 양쪽 라이브러리 모두 broadcasting 결과가 같은 방식으로 동작한다.
+print("[3] (N,) 과 (N, 1)")
 
 # PyTorch 로 시연 (NumPy 도 결과 동일)
 v_1d  = torch.tensor([1., 2., 3., 4.])         # shape (4,)
@@ -73,11 +73,11 @@ print(f"  v_col + v_col  : (4,1) + (4,1) = {tuple((v_col + v_col).shape)}")
 print("→ 차원이 미묘하게 다른 두 텐서를 더하기 전에 항상 .shape 를 확인할 것.")
 print("")
 
-# NumPy 에서도 똑같이 함정 발생
+# NumPy 에서도 똑같이 동작
 v_np_1d  = np.array([1., 2., 3., 4.])
 v_np_col = v_np_1d.reshape(-1, 1)
 v_np_row = v_np_1d.reshape(1, -1)
-print(f"  NumPy  : (4,1) + (1,4) = {(v_np_col + v_np_row).shape}    ← 동일한 함정")
+print(f"  NumPy  : (4,1) + (1,4) = {(v_np_col + v_np_row).shape}    ← 동일한 결과")
 print("")
 
 # ────────────── (4) 명시적 broadcast 확인 ──────────────
@@ -90,5 +90,5 @@ print(f"  PyTorch : torch.broadcast_shapes((3,1,5), (1,4,5)) = {torch.broadcast_
 # - element-wise (+, -, *, /, **) : NumPy 와 PyTorch 가 완전히 동일 동작
 # - '*' 는 절대 행렬 곱이 아님 (양쪽 모두) — 행렬 곱은 06 챕터
 # - broadcasting 규칙 동일 : 끝 차원부터 (같음 or 한쪽이 1) 이면 자동 확장
-# - (N,) vs (N, 1) 함정도 양쪽 모두 동일하게 발생
+# - (N,) vs (N, 1) 차이도 양쪽 모두 동일하게 동작
 # - 의도 명확화 : reshape / unsqueeze / expand_dims 로 차원을 맞추는 습관
