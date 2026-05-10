@@ -40,7 +40,10 @@ optimizer_G = torch.optim.Adam(generator.parameters(), lr=opt.lr, betas=(opt.bet
 print(optimizer_D, optimizer_G)
 
 ## criterion 정의
-criterion = torch.nn.BCELoss().to(device)
+# BCEWithLogitsLoss : sigmoid + BCE 를 한 번에 계산하므로 수치적으로 안정적.
+# Discriminator 의 use_sigmoid_D=False 와 짝을 이룸.
+# (참고: use_sigmoid_D=True 로 두고 nn.BCELoss 를 쓰면 동일 결과지만 수치 안정성이 떨어짐)
+criterion = torch.nn.BCEWithLogitsLoss().to(device)
 print(criterion)
 l1_criterion = torch.nn.L1Loss().to(device)
 print(l1_criterion)
@@ -73,10 +76,14 @@ while epochs < opt.num_epochs:
         tar = tar.to(device)
         gen = generator(inp)
 
+        ## Pix2Pix : Discriminator 는 (입력, 출력) 쌍을 받아 판별 (Conditional GAN)
+        pair_real = torch.cat([inp, tar], dim=1)            # 진짜 쌍 : (inp, 정답 영상)
+        pair_fake = torch.cat([inp, gen.detach()], dim=1)   # 가짜 쌍 : (inp, 생성 영상). detach 로 G 그래프 차단
+
         ## Discriminator 학습
         optimizer_D.zero_grad()
-        pred_real = discriminator(tar)
-        pred_fake = discriminator(gen.detach())
+        pred_real = discriminator(pair_real)
+        pred_fake = discriminator(pair_fake)
         loss_D_real = criterion(pred_real, torch.ones_like(pred_real))
         loss_D_fake = criterion(pred_fake, torch.zeros_like(pred_fake))
         loss_D = (loss_D_real + loss_D_fake) / 2
@@ -84,9 +91,10 @@ while epochs < opt.num_epochs:
         optimizer_D.step()
         losses_D.append(loss_D.item())
 
-        ## Generator 학습
+        ## Generator 학습 — Discriminator 를 속이고(L_G), 정답에 가깝게(L_L1)
         optimizer_G.zero_grad()
-        pred_fake = discriminator(gen)
+        pair_fake_for_G = torch.cat([inp, gen], dim=1)      # 여기서는 detach 하지 않음
+        pred_fake = discriminator(pair_fake_for_G)
         loss_G = criterion(pred_fake, torch.ones_like(pred_fake))
         loss_L = l1_criterion(gen, tar)
         loss = loss_G + opt.lamb * loss_L
@@ -98,8 +106,33 @@ while epochs < opt.num_epochs:
         iters += 1
 
         if iters % 100 == 0:
-            print(f"Epoch [{epochs}/{opt.num_epochs}], Step [{iters}], Loss_D: {np.mean(losses_D):.4f}, Loss_G: {np.mean(losses_G):.4f}, Loss_L: {np.mean(losses_L):.4f}, Time: {time.time()-t0:.4f}")
+            print(f"Epoch [{epochs}/{opt.num_epochs}], Step [{iters}], "
+                  f"Loss_D: {np.mean(losses_D):.4f}, Loss_G: {np.mean(losses_G):.4f}, "
+                  f"Loss_L: {np.mean(losses_L):.4f}, Time: {time.time()-t0:.4f}")
             losses_D = []
             losses_G = []
             losses_L = []
             t0 = time.time()
+
+    epochs += 1
+
+    ## epoch 종료 시 모델 + optimizer 상태 저장 (5 epoch 단위)
+    if epochs % 5 == 0:
+        state = {
+            "discriminator": discriminator.state_dict(),
+            "generator": generator.state_dict(),
+            "optimizer_D": optimizer_D.state_dict(),
+            "optimizer_G": optimizer_G.state_dict(),
+            "epoch": epochs,
+        }
+        torch.save(state, f"{save_dir_model}/model_{epochs:04d}.pt")
+
+## 마지막 모델 저장
+state = {
+    "discriminator": discriminator.state_dict(),
+    "generator": generator.state_dict(),
+    "optimizer_D": optimizer_D.state_dict(),
+    "optimizer_G": optimizer_G.state_dict(),
+    "epoch": epochs,
+}
+torch.save(state, f"{save_dir_model}/model_final.pt")
