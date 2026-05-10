@@ -22,7 +22,7 @@ def get_num_params(model):
 inp = torch.randn(4, 1, 128, 128)
 linear = nn.Linear(128*128, 64*64*3, bias=False)
 print(linear)
-inp = inp.clone().reshape(4, -1) # 1x128x128 -> 1x(128x128)
+inp = inp.reshape(4, -1) # 1x128x128 -> 1x(128x128)
 out_linear = linear(inp) # 1x(128x128) -> 1x(64x64x3)
 out_linear = out_linear.reshape(4, 3, 64, 64) # 1x(64x64x3) -> 1x3x64x64
 print(out_linear.size())
