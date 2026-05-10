@@ -47,7 +47,7 @@ class TrainOptions(BaseOptions):
     """학습에 필요한 옵션"""
     def __init__(self):
         super(TrainOptions, self).__init__()
-        # bool 옵션은 argparse 의 함정 (type=bool 은 'False' 문자열도 True 로 평가) 을 피하기 위해
+        # bool 옵션은 type=bool 사용 시 'False' 문자열도 True 로 평가되는 동작을 피하기 위해
         # store_true / store_false 패턴 사용
         self.parser.add_argument('--is_train', dest='is_train', action='store_true', default=True, help="학습 모드 (기본값)")
         self.parser.add_argument('--gpu_id', type=int, default=0, help="사용할 GPU 인덱스")
