@@ -65,6 +65,6 @@ print("  ← 마지막 Sigmoid 때문에 출력이 (0, 1) 범위")
 #   LeakyReLU  y = x (x>0), αx (x<0)            ReLU 의 음수 영역 살림 (GAN 등)
 #   Sigmoid    y = 1/(1+e^-x), [0, 1]            이진분류 출력 / 확률
 #   Tanh       y = (e^x-e^-x)/(e^x+e^-x), [-1, 1]  정규화된 영상 출력 (Pix2Pix 등)
-#   Softmax    각 dim 합이 1                     다중분류 출력 (단, CrossEntropyLoss 와 함께 쓰면 함정 — 29 챕터)
+#   Softmax    각 dim 합이 1                     다중분류의 추론 단계에서 확률 변환 (학습 시에는 CrossEntropyLoss 가 내부에서 처리)
 #
-# 함정 : 활성 함수는 학습 가능한 파라미터가 0 이지만, 모델의 표현력에 큰 영향을 미침.
+# 참고 : 활성 함수는 학습 가능한 파라미터가 0 이지만, 모델의 표현력에 큰 영향을 미침.
