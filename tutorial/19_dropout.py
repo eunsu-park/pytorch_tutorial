@@ -76,6 +76,6 @@ print("  → 항상 같은 결과 (Dropout 이 비활성)")
 #     nn.Dropout2d   — 채널 단위 dropout (CNN 에서 가끔 사용)
 #     nn.AlphaDropout — SELU 와 함께 쓰는 변형
 #
-# 함정
+# 주의사항
 #   - inplace=True 는 입력을 직접 수정하므로 디버깅이 어려움 — 기본값(False) 권장
 #   - 평가 루프 직전에 model.eval() 호출을 잊으면 결과가 매번 달라짐
