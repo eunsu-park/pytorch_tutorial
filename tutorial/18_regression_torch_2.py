@@ -1,10 +1,18 @@
 # 18_regression_torch_2.py
-# PyTorch NN을 이용한 선형 회귀
+# PyTorch NN 을 이용한 선형 회귀 (nn.Linear + nn.MSELoss)
+#
+# 17 과 비교
+#   - 17 : w_pred, b_pred 두 tensor 를 직접 만들고 곱·합으로 모델을 표현
+#   - 18 : nn.Linear(1, 1) 한 줄로 동일한 모델을 정의 (내부에 weight, bias 자동 등록)
+# 손실 함수도 mse 직접 구현 → nn.MSELoss() 로 교체.
 
 import numpy as np
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
+
+np.random.seed(0)
+torch.manual_seed(0)
 
 def generate_dataset(w_true, b_true, num=200):
     """
