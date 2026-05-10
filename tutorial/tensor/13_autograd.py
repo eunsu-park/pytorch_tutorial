@@ -2,7 +2,7 @@
 # Autograd — PyTorch 가 자동으로 미분을 계산하는 방식
 #
 # 학습 목표
-#   다음 챕터 (15~16 회귀) 에서 사용할 requires_grad / backward / grad / detach / no_grad 를
+#   다음 nn 폴더 (nn/01~02 회귀) 에서 사용할 requires_grad / backward / grad / detach / no_grad 를
 #   먼저 정리한다.
 
 import torch
@@ -69,7 +69,7 @@ print(f"  no_grad 안의 y.requires_grad = {y.requires_grad}    (False 가 정�
 # - .detach()          : 그래프에서 tensor 를 떼어낸 사본 (값은 같음)
 # - torch.no_grad()    : 컨텍스트 안에서는 그래프 생성 자체를 안 함 (추론 시 권장)
 #
-# 학습 루프의 표준 패턴 (15~16 챕터에서 본격 사용)
+# 학습 루프의 표준 패턴 (nn/01~02 챕터에서 본격 사용)
 #     optimizer.zero_grad()    # 이전 step 의 grad 를 0 으로
 #     output = model(x)
 #     loss   = loss_fn(output, y)

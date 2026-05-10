@@ -71,7 +71,7 @@ print(f"  PyTorch : x[torch.randperm(N)]        로 셔플")
 print("")
 
 # ────────────── (4) 배치 슬라이싱 ──────────────
-# 02 챕터의 'for 배치' 패턴을 재현. 양쪽 동일 문법.
+# 02 챕터의 슬라이싱 패턴을 배치로 재현. 양쪽 동일 문법.
 print("[4] 배치 슬라이싱 (수동 구현)")
 
 # 양쪽 모두 (1000, 3, 28, 28) 영상 가정
@@ -98,4 +98,4 @@ print(f"  ... (총 {nb_batch}개 배치)")
 # 셔플
 #     NumPy   : x[np.random.permutation(N)]   또는 np.random.shuffle(x) (in-place)
 #     PyTorch : x[torch.randperm(N)]
-# 배치 추출       : 양쪽 동일 슬라이싱. 실전은 DataLoader (26 챕터) 가 자동화.
+# 배치 추출       : 양쪽 동일 슬라이싱. 실전은 DataLoader (nn/12 챕터) 가 자동화.

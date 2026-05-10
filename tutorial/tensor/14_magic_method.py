@@ -1,10 +1,10 @@
 # 14_magic_method.py
 # Magic Method — PyTorch 의 nn.Module 과 Dataset 을 이해하기 위한 사전 학습
 #
-# 다음 챕터들과의 연결
-#   - __init__              : 모델/데이터셋 초기화 (16, 25, 26 챕터)
-#   - __call__              : model(x) 호출 시 forward 가 자동 실행되는 이유 (25)
-#   - __len__, __getitem__  : Dataset 클래스가 구현해야 하는 메서드 (26)
+# 다음 nn 폴더 챕터들과의 연결
+#   - __init__              : 모델/데이터셋 초기화 (nn/02, nn/11, nn/12 챕터)
+#   - __call__              : model(x) 호출 시 forward 가 자동 실행되는 이유 (nn/11)
+#   - __len__, __getitem__  : Dataset 클래스가 구현해야 하는 메서드 (nn/12)
 #   - __repr__              : print(model) 결과를 보기 좋게 만드는 메서드
 
 
