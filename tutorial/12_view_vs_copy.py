@@ -1,5 +1,5 @@
 # 12_view_vs_copy.py
-# 메모리 공유(view) vs 복사(copy) — 매우 흔한 디버깅 함정
+# 메모리 공유(view) vs 복사(copy) — 디버깅 시 자주 마주치는 동작
 #
 # 핵심
 #   reshape / view 결과는 가능하면 원본과 메모리를 공유한다 (view).
@@ -52,10 +52,10 @@ print(f"  clone()  data_ptr 같음 : {c.data_ptr() == x.data_ptr()}    ← 데�
 print(f"  detach() data_ptr 같음 : {d.data_ptr() == x.data_ptr()}     ← 데이터 공유")
 print("")
 
-# ────────────── (4) 흔한 함정 — 학습 중 텐서를 기록할 때 ──────────────
+# ────────────── (4) 학습 중 텐서를 기록할 때 ──────────────
 # 학습 루프에서 loss/예측을 리스트에 모을 때 그냥 append 하면 그래프까지 따라옴 → 메모리 누수.
 # 반드시 .detach() 또는 .item() 으로 그래프를 분리.
-print("[4] 학습 루프 함정")
+print("[4] 학습 루프 주의사항")
 print("  losses.append(loss)           ← ✗ 그래프 누수")
 print("  losses.append(loss.item())    ← ✓ 파이썬 숫자로 추출 (scalar)")
 print("  preds.append(out.detach().cpu())  ← ✓ 그래프 분리 후 보관")
