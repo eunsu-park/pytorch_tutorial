@@ -1,8 +1,16 @@
 # 16_regression_numpy.py
-# NumPy를 이용한 선형 회귀
+# NumPy 를 이용한 선형 회귀 — 가장 낮은 단계 (수동 gradient descent)
+#
+# 학습 흐름
+#   16 (지금) : NumPy 만으로 손실/기울기/업데이트를 모두 손으로 작성
+#   17        : PyTorch tensor + autograd + optim.SGD 로 갈아끼움
+#   18        : nn.Linear + nn.MSELoss + optim 로 한 단계 더 추상화
+# 같은 데이터로 같은 회귀 문제를 풀어가며 도구가 어떻게 진화하는지를 본다.
 
 import numpy as np
 import matplotlib.pyplot as plt
+
+np.random.seed(0)   # 16, 17, 18 모두 같은 시드 → 결과 비교 가능
 
 def generate_dataset(w_true, b_true, num=200):
     """
