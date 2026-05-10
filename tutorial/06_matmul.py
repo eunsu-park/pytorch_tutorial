@@ -25,7 +25,7 @@ print(f"  PyTorch : torch.dot(a, b) = {torch.dot(a_pt, b_pt).item()}")
 print(f"            (a * b).sum()   = {(a_pt * b_pt).sum().item()}")
 print("")
 
-# ⚠️ 함정 : np.dot 은 다차원이면 matmul 처럼 동작하지만, torch.dot 은 1D 만 허용.
+# 차이점 : np.dot 은 다차원이면 matmul 처럼 동작하지만, torch.dot 은 1D 만 허용.
 A_np = np.array([[1., 2.], [3., 4.]])
 B_np = np.array([[5., 6.], [7., 8.]])
 print("  np.dot(A, B)  ← NumPy 는 2D 입력에서 matmul 처럼 자동 동작")
@@ -105,7 +105,7 @@ print("  ← nn.Linear(8, 4) 의 forward 와 정확히 동일한 계산")
 # 외적 (1D, 1D → 2D)         np.outer(a, b)                  torch.outer(a, b)
 # Einstein 합                np.einsum('ij,jk->ik', A, B)    torch.einsum('ij,jk->ik', A, B)
 #
-# 흔한 함정
+# 주의사항
 # - '*' 는 element-wise. 행렬 곱은 '@' 또는 matmul (양쪽 모두).
 # - np.dot 은 다차원에서 matmul 처럼 동작 → torch.dot 으로 옮길 때 주의 (1D 전용).
 # - 차원 mismatch (K != K) 는 RuntimeError. 항상 .shape 로 확인.
