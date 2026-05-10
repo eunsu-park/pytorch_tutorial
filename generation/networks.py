@@ -3,8 +3,35 @@ import torch.nn as nn
 import torch.nn.init as init
 
 
+# ──────────────────────────────────────────────────────────────
+# 본 모듈은 Pix2Pix(Conditional GAN) 구조를 따른다.
+# - Generator : 입력 영상(inp) → 변환 영상(gen) (U-Net)
+# - Discriminator : (입력 영상, 출력 영상) 쌍을 받아 진짜/가짜 판별
+#   → 첫 Conv 의 입력 채널이 in_channels + out_channels 인 이유
+#
+# 따라서 train.py 에서는 다음과 같이 호출되어야 함.
+#   pred_real = D( torch.cat([inp, tar], dim=1) )    # 진짜 쌍
+#   pred_fake = D( torch.cat([inp, gen], dim=1) )    # 가짜 쌍
+# ──────────────────────────────────────────────────────────────
+
+
 class PatchDiscriminator(nn.Module):
+    """
+    Pix2Pix 의 PatchGAN Discriminator
+    각 패치 단위로 진짜/가짜를 판별. 출력은 logit 맵(use_sigmoid=False) 또는 확률 맵(=True).
+    학습 시 BCEWithLogitsLoss 와 함께 쓰면 안전 (use_sigmoid=False 권장).
+    """
     def __init__(self, in_channels, out_channels, nb_layers, nb_feat_init, nb_feat_max, use_sigmoid):
+        """
+        Args:
+            in_channels  : Generator 입력 영상의 채널 수 (Discriminator 입력의 일부)
+            out_channels : Generator 출력 영상의 채널 수 (Discriminator 입력의 일부)
+            nb_layers    : 다운샘플링 Conv 블록 수
+            nb_feat_init : 첫 블록의 출력 feature 수
+            nb_feat_max  : feature 수 상한
+            use_sigmoid  : True 이면 출력에 sigmoid 적용 (BCELoss 호환)
+                           False 이면 logit 그대로 (BCEWithLogitsLoss 와 함께 사용 — 권장)
+        """
         super(PatchDiscriminator, self).__init__()
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -44,7 +71,18 @@ class PatchDiscriminator(nn.Module):
 
 
 class PixelDiscriminator(nn.Module):
+    """
+    Pix2Pix 의 1x1 PixelGAN Discriminator
+    각 픽셀 단위로 진짜/가짜를 판별 (PatchGAN 의 극단적 케이스, patch=1).
+    """
     def __init__(self, in_channels, out_channels, nb_feat_init, use_sigmoid):
+        """
+        Args:
+            in_channels  : Generator 입력 영상의 채널 수
+            out_channels : Generator 출력 영상의 채널 수
+            nb_feat_init : 첫 블록의 출력 feature 수
+            use_sigmoid  : True/False 의미는 PatchDiscriminator 와 동일
+        """
         super(PixelDiscriminator, self).__init__()
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -76,6 +114,7 @@ class PixelDiscriminator(nn.Module):
 
 
 class UnetDown(nn.Module):
+    """U-Net 의 다운샘플링 블록 : LeakyReLU → Conv(stride=2) → BN"""
     def __init__(self, nb_feat_in, nb_feat_out):
         super(UnetDown, self).__init__()
         self.build(nb_feat_in, nb_feat_out)
@@ -91,6 +130,7 @@ class UnetDown(nn.Module):
     
 
 class UnetCenter(nn.Module):
+    """U-Net 의 가장 안쪽(bottleneck) 블록 : down → ReLU → up → BN → Dropout"""
     def __init__(self, nb_feat_in, nb_feat_out):
         super(UnetCenter, self).__init__()
         self.build(nb_feat_in, nb_feat_out)
@@ -108,6 +148,7 @@ class UnetCenter(nn.Module):
         return self.model(inp)
 
 class UnetUp(nn.Module):
+    """U-Net 의 업샘플링 블록 : ReLU → ConvTranspose(stride=2) → BN (+선택적 Dropout)"""
     def __init__(self, nb_feat_in, nb_feat_out, use_dropout):
         super(UnetUp, self).__init__()
         self.build(nb_feat_in, nb_feat_out, use_dropout)
@@ -125,6 +166,10 @@ class UnetUp(nn.Module):
 
 
 class UnetGenerator(nn.Module):
+    """
+    U-Net 기반 Generator (Pix2Pix)
+    nb_down_G 단계로 다운샘플링했다가 동일 단계로 업샘플링하면서 skip connection 으로 합침.
+    """
     def __init__(self, in_channels, out_channels, nb_down_G, nb_feat_init_G, use_dropout, use_tanh):
         super(UnetGenerator, self).__init__()
         self.in_channels = in_channels
@@ -153,21 +198,18 @@ class UnetGenerator(nn.Module):
         self.block_center = UnetCenter(nb_feat_before, nb_feat_after)
 
     def forward(self, inp):
-
-#        down_0 = self.block_down_0(inp)
-#        down_1 = self.block_down_1(down_0)
-#        down_2 = self.block_down_2(down_1)
-#        down_3 = self.block_down_3(down_2)
-
-#        center = self.block_center(down_3)
-
-#        up_3 = self.block_up_3(torch.cat([center, down_3], 1))
-#        up_2 = self.block_up_2(torch.cat([up_3, down_2], 1))
-#        up_1 = self.block_up_1(torch.cat([up_2, down_1], 1))
-#        up_0 = self.block_up_0(torch.cat([up_1, down_0], 1))
-
-#        return up_0
-
+        # 명시적 형태(이해를 돕기 위한 4-스텝 예시)
+        #   down_0 = self.block_down_0(inp)
+        #   down_1 = self.block_down_1(down_0)
+        #   down_2 = self.block_down_2(down_1)
+        #   down_3 = self.block_down_3(down_2)
+        #   center = self.block_center(down_3)
+        #   up_3   = self.block_up_3(torch.cat([center, down_3], 1))
+        #   up_2   = self.block_up_2(torch.cat([up_3, down_2], 1))
+        #   up_1   = self.block_up_1(torch.cat([up_2, down_1], 1))
+        #   up_0   = self.block_up_0(torch.cat([up_1, down_0], 1))
+        #   return up_0
+        # 아래는 nb_down_G 가 가변일 때를 위한 일반화 구현 — 동작은 위와 동일.
         layers = [inp]
         for i in range(self.nb_down_G-1):
             layers.append(getattr(self, 'block_down_%d'%(i)) (layers[-1]))
@@ -183,6 +225,10 @@ class UnetGenerator(nn.Module):
 
 
 def define_discriminator(opt, state_dict=None, device=None):
+    """
+    opt 에 따라 Patch / Pixel Discriminator 를 생성한다.
+    nb_layers_D == 0 이면 PixelDiscriminator, 그 외에는 PatchDiscriminator 사용.
+    """
     in_channels = opt.in_channels
     out_channels = opt.out_channels
     nb_layers = opt.nb_layers_D
@@ -209,6 +255,7 @@ def define_discriminator(opt, state_dict=None, device=None):
 
 
 def define_generator(opt, state_dict=None, device=None):
+    """opt 에 따라 U-Net Generator 를 생성한다."""
     in_channels = opt.in_channels
     out_channels = opt.out_channels
     nb_down_G = opt.nb_down_G
