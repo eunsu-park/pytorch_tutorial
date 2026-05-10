@@ -1,14 +1,17 @@
 # Tutorial
 
-총 **28 개 챕터**를 두 폴더로 나눠 단계적으로 학습합니다.
+총 **36 개 챕터**를 세 폴더로 나눠 단계적으로 학습합니다.
 
 ```
 tutorial/
-├── tensor/   (14 챕터)  : 텐서 다루기 + autograd + 매직 메서드
-└── nn/       (14 챕터)  : 신경망 회귀·레이어·모델·학습 인프라
+├── tensor/    (14 챕터)  : 텐서 다루기 + autograd + 매직 메서드
+├── workflow/  (8 챕터)   : 데이터→모델→학습→평가 워크플로우 용법 익히기
+└── nn/        (14 챕터)  : 신경망 회귀·레이어·모델·학습 인프라
 ```
 
 각 챕터는 단독 실행 가능하며 (`python tutorial/<folder>/NN_xxx.py`), 주석 포함 100라인 안팎입니다.
+
+학습 순서 권장 : **`tensor/`** → **`workflow/`** → **`nn/`**
 
 ## tensor — 텐서 다루기 (14 챕터)
 
@@ -28,6 +31,22 @@ tutorial/
 | 12 | `12_view_vs_copy.py` | 메모리 공유 vs clone, detach 차이 |
 | 13 | `13_autograd.py` | requires_grad / backward / grad / detach / no_grad |
 | 14 | `14_magic_method.py` | nn.Module · Dataset 의 기반이 되는 매직 메서드 |
+
+## workflow — 학습 워크플로우 용법 (8 챕터)
+
+`tensor/` 와 `nn/` 사이의 연결 고리. 데이터 준비부터 평가까지 **PyTorch 의 표준 용법**을
+한 줄씩 익힌다. `nn/` 으로 본격 진입하기 전에 전체 그림을 잡는 단계.
+
+| # | 파일 | 주제 |
+|---:|---|---|
+| 01 | `01_data_pandas.py` | CSV → pandas → numpy → tensor 표준 변환 |
+| 02 | `02_data_dataset.py` | `torch.utils.data.Dataset` 직접 작성 |
+| 03 | `03_data_dataloader.py` | DataLoader + transforms + random_split (MNIST) |
+| 04 | `04_model_layers.py` | nn.Linear/Conv2d 다양한 인자 + nn.Sequential |
+| 05 | `05_model_module.py` | nn.Module 상속 + 분기·skip connection |
+| 06 | `06_loss_optim.py` | 손실 함수 + 옵티마이저 + 스케줄러 (한 묶음) |
+| 07 | `07_training.py` | 학습 루프 표준 4단계 + scheduler 위치 |
+| 08 | `08_evaluation.py` | 평가 루프 + 회귀/분류 지표 (MSE, accuracy, F1) |
 
 ## nn — 신경망 (14 챕터)
 
@@ -91,9 +110,19 @@ tutorial/
 ```bash
 # 단일 파일 실행
 python tutorial/tensor/01_tensor_basics.py
+python tutorial/workflow/01_data_pandas.py
 python tutorial/nn/01_regression_manual.py
 
 # 폴더별 순차 실행 (zsh)
-for f in tutorial/tensor/[0-9][0-9]_*.py; do echo "=== $f ==="; python "$f"; done
-for f in tutorial/nn/[0-9][0-9]_*.py;     do echo "=== $f ==="; python "$f"; done
+for f in tutorial/tensor/[0-9][0-9]_*.py;   do echo "=== $f ==="; python "$f"; done
+for f in tutorial/workflow/[0-9][0-9]_*.py; do echo "=== $f ==="; python "$f"; done
+for f in tutorial/nn/[0-9][0-9]_*.py;       do echo "=== $f ==="; python "$f"; done
+```
+
+## 추가 의존성
+
+`workflow/03_data_dataloader.py` 는 MNIST 다운로드를 위해 `torchvision` 이 필요합니다.
+
+```bash
+pip install torchvision
 ```
