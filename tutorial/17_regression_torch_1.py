@@ -1,10 +1,18 @@
 # 17_regression_torch_1.py
-# PyTorch를 이용한 선형 회귀
+# PyTorch 를 이용한 선형 회귀 (autograd + SGD)
+#
+# 16 과 비교
+#   - 16 : w_pred -= lr * 직접 미분식  (사람이 손으로 미분)
+#   - 17 : loss.backward() + optimizer.step()  (autograd 가 미분 자동 계산)
+# 즉 "기울기 계산" 부분만 PyTorch 가 대신 해주는 단계.
 
 import numpy as np
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
+
+np.random.seed(0)
+torch.manual_seed(0)
 
 def generate_dataset(w_true, b_true, num=200):
     """
