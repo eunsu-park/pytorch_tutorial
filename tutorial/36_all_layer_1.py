@@ -39,7 +39,8 @@ model2 += [nn.Linear(4096, 4096)] # 4096*4096 + 4096 = 16781312
 model2 += [nn.ReLU()]
 model2 += [nn.Dropout(p=0.5)]
 model2 += [nn.Linear(4096, 10)] # 4096*10 + 10 = 40970
-model2 += [nn.Softmax(dim=1)]
+model2 += [nn.Softmax(dim=1)]   # ⚠️ 분류 문제에서 CrossEntropyLoss 와 함께 쓰면 이중 적용 함정
+                                 #     자세한 비교는 tutorial/44_softmax_crossentropy.py 참고
 model2 = nn.Sequential(*model2)
 print(model2)
 print(f"Number of parameters in model2: {get_num_params(model2)}")
