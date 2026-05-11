@@ -1,11 +1,11 @@
 # Tutorial
 
-총 **36 개 챕터**를 세 폴더로 나눠 단계적으로 학습합니다.
+총 **37 개 챕터**를 세 폴더로 나눠 단계적으로 학습합니다.
 
 ```
 tutorial/
 ├── tensor/    (14 챕터)  : 텐서 다루기 + autograd + 매직 메서드
-├── workflow/  (8 챕터)   : 데이터→모델→학습→평가 워크플로우 용법 익히기
+├── workflow/  (9 챕터)   : 데이터→모델→학습→평가→모니터링 워크플로우 용법 익히기
 └── nn/        (14 챕터)  : 신경망 회귀·레이어·모델·학습 인프라
 ```
 
@@ -32,9 +32,9 @@ tutorial/
 | 13 | `13_autograd.py` | requires_grad / backward / grad / detach / no_grad |
 | 14 | `14_magic_method.py` | nn.Module · Dataset 의 기반이 되는 매직 메서드 |
 
-## workflow — 학습 워크플로우 용법 (8 챕터)
+## workflow — 학습 워크플로우 용법 (9 챕터)
 
-`tensor/` 와 `nn/` 사이의 연결 고리. 데이터 준비부터 평가까지 **PyTorch 의 표준 용법**을
+`tensor/` 와 `nn/` 사이의 연결 고리. 데이터 준비부터 평가·모니터링까지 **PyTorch 의 표준 용법**을
 한 줄씩 익힌다. `nn/` 으로 본격 진입하기 전에 전체 그림을 잡는 단계.
 
 | # | 파일 | 주제 |
@@ -47,6 +47,7 @@ tutorial/
 | 06 | `06_loss_optim.py` | 손실 함수 + 옵티마이저 + 스케줄러 (한 묶음) |
 | 07 | `07_training.py` | 학습 루프 표준 4단계 + scheduler 위치 |
 | 08 | `08_evaluation.py` | 평가 루프 + 회귀/분류 지표 (MSE, accuracy, F1) |
+| 09 | `09_monitoring.py` | TensorBoard 로 loss/영상/가중치 분포 추적 |
 
 ## nn — 신경망 (14 챕터)
 
@@ -122,7 +123,14 @@ for f in tutorial/nn/[0-9][0-9]_*.py;       do echo "=== $f ==="; python "$f"; d
 ## 추가 의존성
 
 `workflow/03_data_dataloader.py` 는 MNIST 다운로드를 위해 `torchvision` 이 필요합니다.
+`workflow/09_monitoring.py` 는 TensorBoard 시각화를 위해 `tensorboard` 가 필요합니다.
 
 ```bash
-pip install torchvision
+pip install torchvision tensorboard
+```
+
+`09_monitoring.py` 실행 후 TensorBoard UI 열기 :
+```bash
+tensorboard --logdir=./runs
+# 브라우저에서 http://localhost:6006 접속
 ```
