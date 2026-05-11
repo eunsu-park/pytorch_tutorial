@@ -55,6 +55,11 @@ x_pt = torch.from_numpy(x_np)             # 메모리 공유 (CPU). 복사가 �
 print(f"  type    = {type(x_pt).__name__}")
 print(f"  shape   = {x_pt.shape}, dtype = {x_pt.dtype}")
 print("  주의 : torch.from_numpy 는 numpy 와 메모리 공유 — 한쪽 수정이 양쪽에 반영됨")
+# 위 줄에서 UserWarning("NumPy array is not writable …") 가 뜨는 이유
+#   pandas 의 to_numpy() 는 DataFrame 메모리를 복사 없이 view 로 돌려준다.
+#   원본 보호를 위해 이 view 는 writeable=False 로 표시되는데,
+#   torch.from_numpy 는 메모리를 공유하므로 tensor 쓰기가 안전하지 않다고 경고하는 것.
+#   → 쓰기가 필요하면 torch.tensor(x_np) 또는 x.to_numpy(copy=True) 처럼 복사본을 만들면 된다.
 print("")
 
 # ────────────── (5) 모양 맞추기 — unsqueeze ──────────────
