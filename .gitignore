@@ -259,3 +259,7 @@ $RECYCLE.BIN/
 .claude/
 CLAUDE.md
 .mcp.json
+
+### TensorBoard ###
+# 학습 로그·이벤트 파일은 커밋하지 않음
+runs/
